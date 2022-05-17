@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "jebbs.plantuml",
+    "dbaeumer.vscode-eslint",
+    "mhutchie.git-graph",
+    "github.copilot",
+    "eamodio.gitlens",
+    "visualstudioexptteam.vscodeintellicode",
+    "ghmcadams.lintlens",
+    "mtxr.sqltools"
+  ]
+}
