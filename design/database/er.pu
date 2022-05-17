@@ -1,0 +1,10 @@
+@startuml er
+entity User {
+  * id : number <<generated>>
+  ---
+  name : text
+  email : text
+  password : bytea
+  createdAt : timestamp
+}
+@enduml
