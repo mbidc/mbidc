@@ -18,7 +18,16 @@ export class APIConfig {
 }
 
 @Injectable()
+export class DatabaseConfig {
+  @IsString()
+  @Expose()
+  URL: string;
+}
+
+@Injectable()
 export class Config {
   @IsConfig(APIConfig)
   API: APIConfig = new APIConfig();
+  @IsConfig(DatabaseConfig)
+  DATABASE: DatabaseConfig = new DatabaseConfig();
 }

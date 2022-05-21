@@ -1,0 +1,5 @@
+{
+  "yaml.schemas": {
+    ".vscode/config.schema.json": "config.yml"
+  }
+}

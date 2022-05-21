@@ -8,7 +8,6 @@ const nestLikeColorScheme: Record<string, bare.Format> = {
   info: clc.green,
   error: clc.red,
   warn: clc.yellow,
-  debug: clc.magentaBright,
   verbose: clc.cyanBright,
 };
 
@@ -37,7 +36,7 @@ export const nestLikeConsoleFormat = (appName = "NestWinston"): Format =>
     return (
       color(`[${appName}] ${process.pid}  - `) +
       ("undefined" !== typeof timestamp ? `${timestamp} ` : "") +
-      "\t " +
+      "\t" +
       clc.yellow(level.toUpperCase() + " ") +
       ("undefined" !== typeof context
         ? `${clc.yellow("[" + context + "]")} `
