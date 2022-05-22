@@ -1,22 +1,32 @@
 module.exports = {
-  root: true,
   env: {
-    node: true,
-    jest: true,
+    browser: true,
+    es2021: true,
   },
-  ignorePatterns: ['.eslintrc.js', 'node_modules/', 'dist/', 'build/'],
-  parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint/eslint-plugin'],
+  ignorePatterns: [".eslintrc.js", "node_modules/", "dist/", "build/"],
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: "latest",
+    sourceType: "module",
+  },
+  plugins: ["react", "@typescript-eslint/eslint-plugin"],
   extends: [
+    "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    'prettier',
+    "prettier",
     "plugin:prettier/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:import/typescript",
   ],
   rules: {
-    "prettier/prettier": ["error", { "singleQuote": false }],
+    "prettier/prettier": ["error", {
+      "singleQuote": false,
+      "trailingComma": "all"
+    }],
     '@typescript-eslint/no-explicit-any': 'off',
     'semi': ["error", "always"],
     'quotes': [2, "double", "avoid-escape"],
@@ -31,5 +41,11 @@ module.exports = {
         },
       },
     ],
+    "react/react-in-jsx-scope": "off",
   },
+  settings: {
+    react: {
+      version: "detect",
+    }
+  }
 };

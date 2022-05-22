@@ -1,4 +1,4 @@
 DATABASE:
-  URL: postgres://postgres:postgres@127.0.0.1:5432/postgres
+  URL: postgres://postgres:postgres@yoshino-s.online:5432/postgres
 API:
   HOST: localhost
