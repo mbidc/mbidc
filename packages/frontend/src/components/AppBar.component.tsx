@@ -13,7 +13,7 @@ import { PropsWithChildren } from "react";
 import Search from "./search.component";
 
 interface Props {
-  title: string;
+  title?: string;
   open?: boolean;
   drawerWidth?: number;
   onMenuClick?: () => void;
@@ -57,9 +57,11 @@ export default function AppBar(props: AppBarProps) {
         >
           <MenuIcon />
         </IconButton>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          {title}
-        </Typography>
+        {title && (
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            {title}
+          </Typography>
+        )}
         <Search />
         <IconButton
           size="large"

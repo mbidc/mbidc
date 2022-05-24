@@ -1,7 +1,7 @@
-import AppTemplate from "./pages/app.template";
+import SchedulePage from "./pages/schedule.page";
 
 function App() {
-  return <AppTemplate></AppTemplate>;
+  return <SchedulePage></SchedulePage>;
 }
 
 export default App;
