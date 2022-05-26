@@ -1,7 +1,7 @@
-import SchedulePage from "./pages/schedule.page";
+import MainPage from "./pages/main.page";
 
 function App() {
-  return <SchedulePage></SchedulePage>;
+  return <MainPage></MainPage>;
 }
 
 export default App;

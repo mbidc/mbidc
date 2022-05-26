@@ -23,3 +23,12 @@ export const databaseProviders: FactoryProvider = {
     }).initialize(),
   inject: [DatabaseConfig, WINSTON_MODULE_PROVIDER],
 };
+
+export const repositoryProviders: FactoryProvider[] = Object.values(Entity).map(
+  (entity) => ({
+    provide: entity,
+    useFactory: async (connection: DataSource) =>
+      connection.getRepository(entity),
+    inject: [DataSource],
+  })
+);

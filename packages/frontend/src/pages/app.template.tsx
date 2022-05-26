@@ -35,14 +35,18 @@ export default function AppTemplate(props: PropsWithChildren<AppProps>) {
           component="main"
           sx={{
             flexGrow: 1,
+            display: "flex",
+            flexDirection: "column",
             p: 3,
+            height: "100vh",
           }}
         >
           <Toolbar />
           <Container
             sx={{
+              flexGrow: 1,
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "start",
               flexDirection: "column",
             }}
           >

@@ -10,4 +10,10 @@ export class Subject {
   description: string;
   @Column()
   type: string;
+  @Column({
+    nullable: true,
+  })
+  img?: string;
+  @Column()
+  document: string;
 }

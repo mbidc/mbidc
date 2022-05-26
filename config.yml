@@ -2,3 +2,8 @@ DATABASE:
   URL: postgres://postgres:postgres@yoshino-s.online:5432/postgres
 API:
   HOST: localhost
+RUNTIME:
+  DIR: /home/y/project/mbidc/runtime
+  REDIS: redis://localhost:6379
+  JWT_EXPIRE: 1800
+  JWT_SECRET: 'secret'

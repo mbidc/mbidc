@@ -25,9 +25,27 @@ export class DatabaseConfig {
 }
 
 @Injectable()
+export class RuntimeConfig {
+  @IsString()
+  @Expose()
+  DIR: string;
+  @IsString()
+  @Expose()
+  REDIS: string;
+  @IsString()
+  @Expose()
+  JWT_SECRET: string;
+  @IsNumber()
+  @Expose()
+  JWT_EXPIRE: number;
+}
+
+@Injectable()
 export class Config {
   @IsConfig(APIConfig)
   API: APIConfig = new APIConfig();
   @IsConfig(DatabaseConfig)
   DATABASE: DatabaseConfig = new DatabaseConfig();
+  @IsConfig(RuntimeConfig)
+  RUNTIME: RuntimeConfig = new RuntimeConfig();
 }
