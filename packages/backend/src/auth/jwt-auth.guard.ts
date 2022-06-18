@@ -11,10 +11,10 @@ import { AuthGuard } from "@nestjs/passport";
 import { AppRequest } from "../common/common.interface";
 
 import { RULES_KEY } from "./auth.decorator";
-import { AuthRule, Public } from "./auth.rules";
+import { AuthRule, PublicRule } from "./auth.rules";
 
 @Injectable()
-export default class JwtAuthGuard extends AuthGuard("jwt") {
+export class JwtAuthGuard extends AuthGuard("jwt") {
   constructor(private readonly reflector: Reflector) {
     super();
   }
@@ -23,7 +23,7 @@ export default class JwtAuthGuard extends AuthGuard("jwt") {
       context.getHandler(),
       context.getClass(),
     ]);
-    if (rules?.find((rule) => rule instanceof Public)) {
+    if (rules?.find((rule) => rule instanceof PublicRule)) {
       return true;
     }
     return super.canActivate(context);
@@ -47,7 +47,6 @@ export default class JwtAuthGuard extends AuthGuard("jwt") {
       context.getClass(),
     ]);
     if (rules && rules.length > 0) {
-      console.log(rules);
       const accessible = rules.every((rule) => rule.access(request));
       if (!accessible) {
         throw new ForbiddenException();

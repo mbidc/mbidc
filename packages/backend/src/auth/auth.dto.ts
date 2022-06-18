@@ -1,11 +1,10 @@
+import { SuccessResponse } from "../common/common.dto";
+
 export class LoginDto {
-  username: string;
-  password: string;
+  id!: string;
+  password!: string;
 }
 
-export class LoginResponseDto {
-  token: string;
-  constructor(token: string) {
-    this.token = token;
-  }
+export class LoginResponseDto extends SuccessResponse<string> {
+  data!: string;
 }

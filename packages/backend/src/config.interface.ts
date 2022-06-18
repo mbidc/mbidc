@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Expose } from "class-transformer";
+import { Type } from "class-transformer";
 import { IsNumber, IsOptional, IsString } from "class-validator";
 
 import "reflect-metadata";
@@ -9,35 +9,41 @@ import { IsConfig } from "./config/config.interface";
 export class APIConfig {
   @IsString()
   @IsOptional()
-  @Expose()
   HOST = "localhost";
   @IsNumber()
   @IsOptional()
-  @Expose()
+  @Type(() => Number)
   PORT = 8080;
 }
 
 @Injectable()
 export class DatabaseConfig {
   @IsString()
-  @Expose()
-  URL: string;
+  URL!: string;
 }
 
 @Injectable()
 export class RuntimeConfig {
   @IsString()
-  @Expose()
-  DIR: string;
+  DIR!: string;
   @IsString()
-  @Expose()
-  REDIS: string;
-  @IsString()
-  @Expose()
-  JWT_SECRET: string;
+  JWT_SECRET!: string;
   @IsNumber()
-  @Expose()
-  JWT_EXPIRE: number;
+  JWT_EXPIRE!: number;
+}
+
+@Injectable()
+export class OSSConfig {
+  @IsString()
+  ACCESS_KEY_ID!: string;
+  @IsString()
+  ACCESS_KEY_SECRET!: string;
+  @IsString()
+  ENDPOINT!: string;
+  @IsString()
+  BUCKET!: string;
+  @IsString()
+  REGION!: string;
 }
 
 @Injectable()
@@ -48,4 +54,6 @@ export class Config {
   DATABASE: DatabaseConfig = new DatabaseConfig();
   @IsConfig(RuntimeConfig)
   RUNTIME: RuntimeConfig = new RuntimeConfig();
+  @IsConfig(OSSConfig)
+  OSS: OSSConfig = new OSSConfig();
 }

@@ -1,29 +1,31 @@
+import { ApiProperty } from "@nestjs/swagger";
 import * as bcrypt from "bcrypt";
-import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
 import { HideProperty } from "../common/common.decorator";
-
-import { UserTag } from "./UserTag.entity";
 
 @Entity()
 export class User {
   @PrimaryColumn()
-  id: number;
-  @Column()
-  name: string;
-  @ManyToMany(() => UserTag, {
-    cascade: true,
+  id!: string;
+
+  @ApiProperty({
+    format: "file",
   })
-  @JoinTable()
-  tags: UserTag[];
-  @Column()
-  phone: string;
+  @Column({
+    nullable: true,
+  })
+  avatar?: string;
+
+  @Column() name!: string;
+  @Column() tags!: string;
+  @Column() phone!: string;
+  @Column() email!: string;
+  @Column() department!: string;
+
   @Column()
   @HideProperty()
-  private password: string;
-  getPassword() {
-    return this.password;
-  }
+  password!: string;
   async setPassword(password: string) {
     this.password = await bcrypt.hash(password, 10);
   }

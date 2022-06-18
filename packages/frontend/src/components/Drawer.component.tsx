@@ -1,7 +1,10 @@
+import { Home } from "@mui/icons-material";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import BookIcon from "@mui/icons-material/Book";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import MailIcon from "@mui/icons-material/Mail";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
+import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
+import EventNoteIcon from "@mui/icons-material/EventNote";
 import { Box } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import MuiDrawer from "@mui/material/Drawer";
@@ -12,6 +15,9 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { useTheme, Theme, CSSObject } from "@mui/material/styles";
+import { NavLink } from "react-router-dom";
+
+import { User } from "../api/user.api";
 
 const openedMixin = (theme: Theme, drawerWidth: number): CSSObject => ({
   width: drawerWidth,
@@ -40,6 +46,81 @@ interface Props {
   setOpen: (open: boolean) => void;
 }
 
+const links = [
+  {
+    text: "首页",
+    icon: <Home />,
+    link: "/",
+  },
+  {
+    text: "课程列表",
+    icon: <BookIcon />,
+    link: "/subjects",
+  },
+];
+
+const adminLinks = [
+  {
+    text: "用户管理",
+    icon: <AccountCircle />,
+    link: "/manage/users",
+  },
+  {
+    text: "课程管理",
+    icon: <CollectionsBookmarkIcon />,
+    link: "/manage/subjects",
+  },
+];
+
+const userLinks = [
+  {
+    text: "我的课程",
+    icon: <EventNoteIcon />,
+    link: "/courses",
+  },
+];
+
+const Item = (
+  open: boolean,
+  {
+    text,
+    icon,
+    link,
+  }: {
+    text: string;
+    icon: React.ReactElement;
+    link: string;
+  },
+) => (
+  <ListItem
+    key={text}
+    disablePadding
+    sx={{ display: "block" }}
+    component={NavLink}
+    to={link}
+    style={{ textDecoration: "none", color: "inherit" }}
+  >
+    <ListItemButton
+      sx={{
+        minHeight: 48,
+        justifyContent: open ? "initial" : "center",
+        px: 2.5,
+      }}
+    >
+      <ListItemIcon
+        sx={{
+          minWidth: 0,
+          mr: open ? 3 : "auto",
+          justifyContent: "center",
+        }}
+      >
+        {icon}
+      </ListItemIcon>
+      <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+    </ListItemButton>
+  </ListItem>
+);
+
 export default function MiniDrawer(props: Props) {
   const theme = useTheme();
   const { open, setOpen, drawerWidth } = props;
@@ -47,6 +128,8 @@ export default function MiniDrawer(props: Props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const me = User.useMe();
 
   return (
     <MuiDrawer
@@ -88,54 +171,12 @@ export default function MiniDrawer(props: Props) {
       </Box>
       <Divider />
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {links.map(({ text, icon, link }) => Item(open, { text, icon, link }))}
       </List>
       <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+      {(me.isAdmin ? adminLinks : userLinks).map(({ text, icon, link }) =>
+        Item(open, { text, icon, link }),
+      )}
     </MuiDrawer>
   );
 }

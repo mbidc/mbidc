@@ -1,11 +1,12 @@
 import { Module } from "@nestjs/common";
 
-import UserTagController from "./tag.controller";
-import UserTagService from "./tag.service";
-import UserController from "./user.controller";
+import { UserAdminController } from "./user.admin.controller";
+import { UserController } from "./user.controller";
+import { UserService } from "./user.service";
 
 @Module({
-  controllers: [UserController, UserTagController],
-  providers: [UserTagService],
+  controllers: [UserController, UserAdminController],
+  providers: [UserService],
+  exports: [UserService],
 })
-export default class UserModule {}
+export class UserModule {}

@@ -110,7 +110,7 @@ const DEFAULT_DAYS = [
   "星期日",
 ];
 
-export default class Schedule {
+export class Schedule {
   constructor(
     public readonly schedule: ScheduleData = [],
     public readonly days: string[] = DEFAULT_DAYS,

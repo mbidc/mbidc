@@ -1,34 +1,54 @@
-import { plainToInstance } from "class-transformer";
-import { IsNumber, IsOptional, IsString } from "class-validator";
-import { useState } from "react";
+import {
+  APIPaginationResponse,
+  APIResponse,
+  fetcher,
+  Pagination,
+  useFetch,
+} from "./fetcher";
+import { upload } from "./upload";
+import { User } from "./user.api";
 
-export default class Subject {
-  @IsNumber()
-  id!: number;
-  @IsString()
+export class Subject {
+  subId!: string;
   name!: string;
-  @IsString()
-  @IsOptional()
+  type!: string;
+  department!: string;
   img?: string;
-  @IsString()
+  detail!: string;
   description!: string;
-  @IsString()
-  document!: string;
-  static getById(_id: number): { data?: Subject; error?: any } {
-    const [sub, setSub] = useState<Subject>();
-    setTimeout(() => {
-      setSub(
-        plainToInstance(Subject, {
-          id: _id,
-          name: "test",
-          img: require("../static/bg.jpg"),
-          description: "这是一个测试课程。".repeat(10),
-          document: "",
-        }),
-      );
-    }, 1000);
-    return {
-      data: sub,
-    };
+  document?: string;
+  maxStudents!: number;
+  teacher!: User;
+  static useSubject(id: string) {
+    return useFetch<APIResponse<Subject>>(`/subject/${id}`, APIResponse, {
+      authorize: true,
+    });
+  }
+  static getAll(pagination?: Pagination) {
+    return useFetch<APIPaginationResponse<Subject>>(
+      `/subject/all?page=${pagination?.page ?? ""}&limit=${
+        pagination?.limit ?? ""
+      }`,
+      APIPaginationResponse,
+      {
+        authorize: true,
+      },
+    );
+  }
+  static async create(create: any) {
+    const payload: any = create;
+    if (create.img) {
+      payload.img = await upload(create.img[0]);
+    }
+    if (create.document) {
+      payload.document = await upload(create.document[0]);
+    }
+    return fetcher(APIResponse, { authorize: true })("/admin/subject", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
   }
 }

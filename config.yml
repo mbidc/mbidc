@@ -1,9 +1,17 @@
 DATABASE:
-  URL: postgres://postgres:postgres@yoshino-s.online:5432/postgres
+  URL: postgres://postgres:postgres@localhost:5432/postgres
 API:
-  HOST: localhost
+  HOST: 0.0.0.0
 RUNTIME:
-  DIR: /home/y/project/mbidc/runtime
-  REDIS: redis://localhost:6379
+  REDIS: redis://localhost:6379/0
+  DIR: /app/runtime
   JWT_EXPIRE: 1800
   JWT_SECRET: 'secret'
+OSS:
+  ACCESS_KEY_ID: 'access_key_id'
+  ACCESS_KEY_SECRET: 'access_key_secret'
+  ENDPOINT: 'endpoint'
+  BUCKET: 'bucket'
+  REGION: 'region'
+COMMON:
+  UPLOAD_PREFER: cloud

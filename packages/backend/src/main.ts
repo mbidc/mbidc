@@ -1,4 +1,5 @@
 import FastifyCors from "@fastify/cors";
+import FastifyMultipart from "@fastify/multipart";
 import { NestFactory } from "@nestjs/core";
 import {
   FastifyAdapter,
@@ -15,6 +16,16 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter()
   );
+  app.setGlobalPrefix("api");
+
+  app.register(FastifyCors, {
+    origin: "*",
+  });
+
+  app.register(FastifyMultipart, {
+    attachFieldsToBody: true,
+    addToBody: true,
+  });
   const config = new DocumentBuilder()
     .addSecurity("jwt", {
       type: "http",
@@ -26,10 +37,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("api", app, document);
-
-  app.register(FastifyCors, {
-    origin: "*",
-  });
 
   const logger = app.get<WinstonLogger>(WINSTON_MODULE_NEST_PROVIDER);
   app.useLogger(logger);

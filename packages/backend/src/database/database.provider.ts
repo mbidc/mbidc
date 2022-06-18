@@ -14,7 +14,7 @@ export const databaseProviders: FactoryProvider = {
     await new DataSource({
       type: "postgres",
       url: config.URL,
-      synchronize: true,
+      synchronize: false,
       logging: true,
       logger: new WinstonLogger(logger),
       entities: Entity,

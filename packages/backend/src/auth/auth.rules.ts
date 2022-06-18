@@ -5,7 +5,7 @@ export abstract class AuthRule {
   //
 }
 
-export class Public extends AuthRule {
+export class PublicRule extends AuthRule {
   public access() {
     return true;
   }
@@ -13,7 +13,7 @@ export class Public extends AuthRule {
 
 export class TagRule extends AuthRule {
   public access(req: AppRequest) {
-    return req.user.tags.includes(this.tag);
+    return req.user.tags.split(",").includes(this.tag);
   }
 
   constructor(public tag: string) {

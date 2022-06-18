@@ -18,6 +18,7 @@ module.exports = {
   rules: {
     "prettier/prettier": ["error", { "singleQuote": false }],
     '@typescript-eslint/no-explicit-any': 'off',
+    "@typescript-eslint/no-unused-vars": ["error", { "ignoreRestSiblings": true }],
     'semi': ["error", "always"],
     'quotes': [2, "double", "avoid-escape"],
     "comma-dangle": ["error", "always-multiline"],

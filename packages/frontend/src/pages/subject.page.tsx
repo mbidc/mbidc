@@ -6,22 +6,44 @@ import {
   Skeleton,
   Typography,
   Button,
+  Link,
 } from "@mui/material";
+import { useContext, useEffect } from "react";
+import { Link as RouteLink, useParams } from "react-router-dom";
 
-import Subject from "../api/subject.api";
+import { Subject } from "../api/subject.api";
 
-import AppTemplate from "./app.template";
+import { AppContext } from "./app.template";
 
-interface SubjectPageProps {
-  id: number;
-}
-
-export default function SubjectPage(props: SubjectPageProps) {
-  const { data, error } = Subject.getById(props.id);
+export default function SubjectPage() {
+  const { sub } = useParams();
+  const context = useContext(AppContext);
+  const { data, error } = Subject.useSubject(sub ?? "");
+  useEffect(() => {
+    context.modify({
+      title: data?.data.name ?? "课程详情",
+      breadcrumbs: [
+        <Link to="/subjects" key="0" component={RouteLink}>
+          Subjects
+        </Link>,
+        <Typography key="1" color="text.primary">
+          {sub}
+        </Typography>,
+      ],
+      action: null,
+    });
+  }, [data]);
+  useEffect(() => {
+    console.log(error);
+  }, [error]);
 
   return (
-    <AppTemplate title={data?.name || "Loading"}>
-      {error && <div>{error.message}</div>}
+    <>
+      {error && (
+        <div>
+          {error.code} {error.message}
+        </div>
+      )}
       <Card>
         {!data ? (
           <Skeleton
@@ -30,15 +52,13 @@ export default function SubjectPage(props: SubjectPageProps) {
             variant="rectangular"
           />
         ) : (
-          data.img && (
-            <CardMedia
-              component="img"
-              sx={{
-                maxHeight: 240,
-              }}
-              image={data?.img}
-            />
-          )
+          <CardMedia
+            component="img"
+            sx={{
+              maxHeight: 240,
+            }}
+            image={data.data.img ?? require("../static/bg.jpg")}
+          />
         )}
         <CardContent>
           {!data ? (
@@ -61,19 +81,29 @@ export default function SubjectPage(props: SubjectPageProps) {
             </>
           ) : (
             <Typography variant="body2" color="text.secondary">
-              {data.description}
+              <b>任课老师：</b> {data.data.teacher.name}
+              <br />
+              <b>联系方式：</b> {data.data.teacher.phone}{" "}
+              {data.data.teacher.email}
+              <br />
+              <b>上课时间：</b> {data.data.detail}
+              <br />
+              <b>人数：</b> {data.data.maxStudents}
+              <br />
+              <b>课程简介：</b> {data.data.description}
             </Typography>
           )}
         </CardContent>
         {data && (
           <CardActions>
-            <Button size="small" href={data.document}>
-              下载
-            </Button>
-            <Button size="small">分享课程</Button>
+            {data.data.document && (
+              <Button size="small" href={data.data.document}>
+                下载教案
+              </Button>
+            )}
           </CardActions>
         )}
       </Card>
-    </AppTemplate>
+    </>
   );
 }

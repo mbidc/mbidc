@@ -1,18 +1,25 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+
+import { HideProperty } from "../common/common.decorator";
 
 import { Course } from "./Course.entity";
-import { User } from "./User.entity";
 
 @Entity()
 export class Open {
   @PrimaryGeneratedColumn()
-  id: number;
-  @Column()
-  start: Date;
-  @Column()
-  end: Date;
-  @ManyToMany(() => Course)
-  courses: Course[];
-  @ManyToMany(() => User)
-  users: User[];
+  id!: number;
+  @Column({ unique: true }) name!: string;
+  @Column() start!: Date;
+  @Column() end!: Date;
+  @HideProperty()
+  @OneToMany(() => Course, (course) => course.open)
+  @JoinColumn()
+  courses!: Course[];
+  @Column() studentTag!: string;
 }

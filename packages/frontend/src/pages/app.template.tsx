@@ -5,25 +5,85 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import React, { PropsWithChildren } from "react";
+import React, { createContext } from "react";
+import { Route, Routes } from "react-router-dom";
 
 import AppBar from "../components/AppBar.component";
 import MiniDrawer from "../components/Drawer.component";
 
-interface AppProps {
-  title?: string;
-  drawerWidth?: number;
-  action?: React.ReactNode;
-}
+import CoursesPage from "./courses.page";
+import MainPage from "./main.page";
+import OpenManagePage from "./open.manage";
+import OpenPage from "./open.page";
+import ScorePage from "./score.page";
+import SubjectManagePage from "./subject.manage";
+import SubjectPage from "./subject.page";
+import SubjectsPage from "./subjects.page";
+import UserManagePage from "./user.manage";
 
-export default function AppTemplate(props: PropsWithChildren<AppProps>) {
-  const { title, action } = props;
-  let { drawerWidth } = props;
-  drawerWidth = drawerWidth ?? 240;
+export const AppContext = createContext<{
+  title: string | undefined;
+  action: React.ReactNode;
+  breadcrumbs: React.ReactNode[];
+  modify: (o: {
+    title: React.SetStateAction<string | undefined>;
+    action: React.SetStateAction<React.ReactNode>;
+    breadcrumbs: React.SetStateAction<React.ReactNode[]>;
+  }) => void;
+}>({
+  title: "",
+  action: null,
+  breadcrumbs: [],
+  modify() {
+    //
+  },
+});
+
+export default function AppTemplate() {
+  const drawerWidth = 240;
+  const [title, setTitle] = React.useState<string>();
+  const [action, setAction] = React.useState<React.ReactNode>();
+  const [breadcrumbs, setBreadcrumbs] = React.useState<React.ReactNode[]>([
+    <Typography color="text.primary" key="a">
+      Breadcrumbs
+    </Typography>,
+    <Typography color="text.primary" key="b">
+      Breadcrumbs
+    </Typography>,
+  ]);
   const [open, setOpen] = React.useState(false);
+
+  function modify({
+    title,
+    action,
+    breadcrumbs,
+  }: {
+    title: React.SetStateAction<string | undefined>;
+    action: React.SetStateAction<React.ReactNode>;
+    breadcrumbs: React.SetStateAction<React.ReactNode[]>;
+  }) {
+    setTitle(title);
+    setAction(action);
+    setBreadcrumbs(breadcrumbs);
+  }
+
   return (
-    <>
-      <Box sx={{ display: "flex" }}>
+    <AppContext.Provider
+      value={{
+        title,
+        action,
+        breadcrumbs,
+        modify,
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          width: "100vw",
+          height: "100vh",
+          backgroundColor: "background.paper",
+        }}
+      >
         <AppBar
           title="MBIDC"
           onMenuClick={() => setOpen(true)}
@@ -67,16 +127,25 @@ export default function AppTemplate(props: PropsWithChildren<AppProps>) {
                   </Typography>
                 )}
                 <Breadcrumbs aria-label="breadcrumb" maxItems={3}>
-                  <Typography color="text.primary">Breadcrumbs</Typography>
-                  <Typography color="text.primary">Breadcrumbs</Typography>
+                  {breadcrumbs}
                 </Breadcrumbs>
               </Box>
               <Box>{action}</Box>
             </Box>
-            {props.children}
+            <Routes>
+              <Route path="/" element={<MainPage />} />
+              <Route path="/manage/users" element={<UserManagePage />} />
+              <Route path="/manage/subjects" element={<SubjectManagePage />} />
+              <Route path="/subjects" element={<SubjectsPage />} />
+              <Route path="/subject/:sub" element={<SubjectPage />} />
+              <Route path="/manage/open/:openId" element={<OpenManagePage />} />
+              <Route path="/open/:openId" element={<OpenPage />} />
+              <Route path="/courses" element={<CoursesPage />} />
+              <Route path="/score/:courseId" element={<ScorePage />} />
+            </Routes>
           </Container>
         </Box>
       </Box>
-    </>
+    </AppContext.Provider>
   );
 }

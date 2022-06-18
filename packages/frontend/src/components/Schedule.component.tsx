@@ -11,7 +11,7 @@ import {
 import GREEN from "@mui/material/colors/green";
 import { forwardRef, useEffect, useState } from "react";
 
-import ScheduleClass from "../utils/schedule.class";
+import { Schedule as ScheduleClass } from "../utils/schedule.class";
 
 const compare = (a: string, b: string) =>
   [a, b]
@@ -19,7 +19,9 @@ const compare = (a: string, b: string) =>
     .reduce((acc, cur) => acc - cur);
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface ScheduleProps {}
+interface ScheduleProps {
+  dense?: boolean;
+}
 
 function _Schedule(props: ScheduleProps, ref?: React.Ref<HTMLTableElement>) {
   const theme = useTheme();

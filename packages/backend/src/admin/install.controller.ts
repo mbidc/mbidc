@@ -1,16 +1,13 @@
-import { Controller, Get, UseGuards } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
+import { Get, UseGuards } from "@nestjs/common";
 import { DataSource } from "typeorm";
 
-import Rule from "../auth/auth.decorator";
-import { Public } from "../auth/auth.rules";
-import { User, UserTag } from "../entity";
+import { Controller, Public } from "../common/common.decorator";
+import { User } from "../entity";
 import { LockService } from "../runtime/lock.service";
 
 import { InstallGuard } from "./install.guard";
 
-@ApiTags("admin")
-@Controller("admin/install")
+@Controller("install")
 @UseGuards(InstallGuard)
 export class InstallController {
   constructor(
@@ -19,21 +16,18 @@ export class InstallController {
   ) {
     //
   }
-  @Rule(new Public())
   @Get()
+  @Public()
   async install() {
-    const tag = new UserTag("admin", 0);
     const user = new User();
-    user.id = 0;
+    user.id = "0";
     user.name = "admin";
     await user.setPassword("admin");
     user.phone = "+8618888888888";
-    user.tags = [tag];
-    await this.db.manager.save([
-      user,
-      new UserTag("teacher", 1),
-      new UserTag("student", 2),
-    ]);
+    user.email = "admin@ecnu.edu.cn";
+    user.department = "管理员";
+    user.tags = "admin";
+    await this.db.manager.save([user]);
     await this.lockService.releaseFileLock("install");
     return "OK";
   }

@@ -1,5 +1,3 @@
-import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import {
   Table,
   TableBody,
@@ -12,33 +10,36 @@ import {
   Skeleton,
   Box,
   Container,
-  IconButton,
   Toolbar,
+  TablePagination,
+  SxProps,
+  Theme,
 } from "@mui/material";
 
 interface DataGridProps<T = any> {
   data?: T[];
+  total?: number;
   idKey: keyof T;
   cols: GridCol<T, any>[];
   error?: Error;
+  limit?: number;
+  page?: number;
+  onPageChange?: (page: number) => void;
+  onLimitChange?: (limit: number) => void;
 }
 
 export interface GridCol<T, K extends keyof T> {
   obj: { new (): T };
   key: K;
   label?: K | string;
-  flex?: number;
-  renderCell?: (value: T[K]) => React.ReactNode;
+  sx?: SxProps<Theme>;
+  renderCell?: (value: T[K], full: T) => React.ReactNode;
 }
 
 export function gridCol<T, K extends keyof T>(
   obj: { new (): T },
   key: K,
-  optons?: {
-    label?: K | string;
-    flex?: number;
-    renderCell?: (value: T[K]) => React.ReactNode;
-  },
+  optons?: Omit<GridCol<T, K>, "obj" | "key">,
 ): GridCol<T, K> {
   return {
     obj,
@@ -49,6 +50,12 @@ export function gridCol<T, K extends keyof T>(
 }
 
 export default function DataGrid<T = any>(props: DataGridProps<T>) {
+  const { total } = props;
+  const limit = props.limit ?? 10;
+  const page = props.page ?? 0;
+  const onPageChange = props.onPageChange ?? (() => 0);
+  const onLimitChange = props.onLimitChange ?? (() => 0);
+
   return props.error ? (
     <Container
       component={Paper}
@@ -58,7 +65,6 @@ export default function DataGrid<T = any>(props: DataGridProps<T>) {
         alignItems: "center",
         justifyContent: "center",
         width: "100%",
-        height: "100%",
       }}
     >
       <Typography color="error.main" component="pre">
@@ -70,7 +76,6 @@ export default function DataGrid<T = any>(props: DataGridProps<T>) {
       component={Paper}
       sx={{
         width: "100%",
-        height: "100%",
         display: "flex",
         flexDirection: "column",
       }}
@@ -89,11 +94,11 @@ export default function DataGrid<T = any>(props: DataGridProps<T>) {
           >
             {props.cols.map((col) => (
               <TableCell
-                key={col.key}
+                key={col.label}
                 sx={{
-                  flex: col.flex ?? 1,
                   textAlign: "center",
                   verticalAlign: "middle",
+                  ...col.sx,
                 }}
               >
                 {col.label}
@@ -111,16 +116,16 @@ export default function DataGrid<T = any>(props: DataGridProps<T>) {
             >
               {props.cols.map((col) => (
                 <TableCell
-                  key={col.key}
+                  key={col.label}
                   sx={{
-                    flex: col.flex ?? 1,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
+                    ...col.sx,
                   }}
                 >
                   {col.renderCell
-                    ? col.renderCell((row as any)[col.key])
+                    ? col.renderCell((row as any)[col.key], row)
                     : (row as any)[col.key]}
                 </TableCell>
               ))}
@@ -134,15 +139,17 @@ export default function DataGrid<T = any>(props: DataGridProps<T>) {
             flexGrow: 1,
           }}
         ></Box>
-        <Typography component="div">1 - 1 of 1</Typography>
-        <Box>
-          <IconButton color="inherit">
-            <KeyboardArrowLeftIcon />
-          </IconButton>
-          <IconButton color="inherit">
-            <KeyboardArrowRightIcon />
-          </IconButton>
-        </Box>
+        <TablePagination
+          component="div"
+          count={total ?? -1}
+          page={page}
+          onPageChange={(e, p) => onPageChange(p)}
+          rowsPerPage={limit}
+          rowsPerPageOptions={[10, 20, 50, 100]}
+          onRowsPerPageChange={(e) => onLimitChange(parseInt(e.target.value))}
+          showFirstButton
+          showLastButton
+        />
       </Toolbar>
     </TableContainer>
   ) : (

@@ -38,7 +38,6 @@ export class ConfigModule {
       _config = merge(_config, yaml.load(readFileSync(file, "utf8")));
     }
     const config = plainToInstance(configInterface, _config, {
-      excludeExtraneousValues: true,
       exposeDefaultValues: true,
     });
     const errors = validateSync(config);

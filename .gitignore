@@ -45,5 +45,5 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
-crawel
-runtime
+/crawel
+/runtime
