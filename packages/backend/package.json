@@ -36,7 +36,7 @@
     "class-validator": "^0.13.2",
     "dotenv": "^16.0.1",
     "dotenv-expand": "^8.0.3",
-    "fastify": "^3.29.0",
+    "fastify": "^3.29.4",
     "fastify-static": "^4.7.0",
     "fastify-swagger": "^5.2.0",
     "find-up": "5.0.0",
