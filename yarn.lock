@@ -3378,9 +3378,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/multipart@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@fastify/multipart@npm:6.0.0"
+"@fastify/multipart@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "@fastify/multipart@npm:6.0.1"
   dependencies:
     "@fastify/busboy": ^1.0.0
     "@fastify/error": ^2.0.0
@@ -3390,7 +3390,7 @@ __metadata:
     hexoid: ^1.0.0
     secure-json-parse: ^2.4.0
     stream-wormhole: ^1.1.0
-  checksum: 1c0ad54a6fccf5ae4030ae9a67677ce3351af79d5fe518d625c253434a12724bc0ca82cff1743ca48e338e92654c49b2d7dc1149d0d39678fc65ce4d6b491386
+  checksum: 716e3ab86f336235c99cf74cf59e192df69a79d054cfbb94fb1d35957bb92c8952ff9071fab51060d420d999f64fd3d74343b5452817a8c3fbc11d4af20a8aef
   languageName: node
   linkType: hard
 
@@ -3968,7 +3968,7 @@ __metadata:
   dependencies:
     "@aws-sdk/client-s3": ^3.100.0
     "@fastify/cors": ^7.0.0
-    "@fastify/multipart": ^6.0.0
+    "@fastify/multipart": ^6.0.1
     "@nestjs/axios": ^0.0.8
     "@nestjs/cli": ^8.2.5
     "@nestjs/common": ^8.4.5
